@@ -1,6 +1,7 @@
 import { User } from "../models/User.js"
 import {registerSchema, loginSchema} from '../validations/registerValidation.js'
 import bcrypt from 'bcryptjs'
+import jwt from 'jsonwebtoken'
 
 export const userRegister = async (req, res) => {
     const {name, email, password} = req.body
@@ -29,7 +30,9 @@ export const userLogin = async (req, res) => {
         if(error) return res.status(400).send(error.details[0].message)
         const validPass = await bcrypt.compare(password, found.password)
         if(!validPass) return res.send('Email or password is invalid')
-        res.send('Logged in')
+        
+        const token = jwt.sign({_id: found._id}, process.env.JWT_SECRET)
+        res.header('auth-token', token).send(token)
 
     } catch (error) {
         console.log(error)
