@@ -6,12 +6,14 @@ import {dbconnection} from './config/db.js'
 import userRegister from './routes/auth.js'
 const app = express()
 import protectedRoute from './routes/protected.js'
-import homeRoute from './routes/home.js'
+import NoteRoutes from './routes/note.js'
 
-app.use(express.json())
 app.use(cors())
+app.use(express.json())
+
 app.use('/', protectedRoute)
-app.use('/', homeRoute)
+app.use('/', NoteRoutes)
+
 dbconnection()
 
 
